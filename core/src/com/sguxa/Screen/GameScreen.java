@@ -2,9 +2,9 @@ package com.sguxa.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.GL20;
 import com.sguxa.gameWorld.GameRenderer;
 import com.sguxa.gameWorld.GameWorld;
+import com.sguxa.zbhelpers.InputHandler;
 
 /**
  * Created by r.gushin on 03.12.2014.
@@ -16,9 +16,17 @@ public class GameScreen implements Screen {
 
 
     public GameScreen(){
-        Gdx.app.log("GameScreen!!","Attached");
-        world=new GameWorld();
-        renderer = new GameRenderer(world);
+        float screenWidth=Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();	
+        float gameWidth=136;
+        float gameHeight=screenHeight/(screenWidth/gameWidth);
+        
+        int mindPointY=(int)(gameHeight/2);
+        
+        world=new GameWorld(mindPointY);
+        renderer=new GameRenderer(world);
+        
+        Gdx.input.setInputProcessor(new InputHandler(world.getBird()));
     }
 
     @Override
