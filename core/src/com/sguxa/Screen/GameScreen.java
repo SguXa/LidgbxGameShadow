@@ -13,6 +13,7 @@ public class GameScreen implements Screen {
     private GameWorld world;
     private GameRenderer renderer;
 
+    private float runTime=0;
 
 
     public GameScreen(){
@@ -24,7 +25,7 @@ public class GameScreen implements Screen {
         int mindPointY=(int)(gameHeight/2);
         
         world=new GameWorld(mindPointY);
-        renderer=new GameRenderer(world);
+        renderer=new GameRenderer(world,(int)gameHeight,mindPointY);
         
         Gdx.input.setInputProcessor(new InputHandler(world.getBird()));
     }
@@ -32,8 +33,9 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         // Мы передаем delta в update метод, для того, чтобы мы могли сделать фреймо-зависимые вычисления
+        runTime+=delta;
         world.update(delta);
-        renderer.render();
+        renderer.render(runTime);
 
     }
 
