@@ -10,62 +10,63 @@ import com.sguxa.zbhelpers.InputHandler;
  * Created by r.gushin on 03.12.2014.
  */
 public class GameScreen implements Screen {
-    private GameWorld world;
-    private GameRenderer renderer;
 
-    private float runTime=0;
+	private GameWorld world;
+	private GameRenderer renderer;
+	private float runTime;
 
+	// This is the constructor, not the class declaration
+	public GameScreen() {
 
-    public GameScreen(){
-        float screenWidth=Gdx.graphics.getWidth();
-        float screenHeight = Gdx.graphics.getHeight();	
-        float gameWidth=136;
-        float gameHeight=screenHeight/(screenWidth/gameWidth);
-        
-        int mindPointY=(int)(gameHeight/2);
-        
-        world=new GameWorld(mindPointY);
-        renderer=new GameRenderer(world,(int)gameHeight,mindPointY);
-        
-        Gdx.input.setInputProcessor(new InputHandler(world.getBird()));
-    }
+		float screenWidth = Gdx.graphics.getWidth();
+		float screenHeight = Gdx.graphics.getHeight();
+		float gameWidth = 136;
+		float gameHeight = screenHeight / (screenWidth / gameWidth);
 
-    @Override
-    public void render(float delta) {
-        // Мы передаем delta в update метод, для того, чтобы мы могли сделать фреймо-зависимые вычисления
-        runTime+=delta;
-        world.update(delta);
-        renderer.render(runTime);
+		int midPointY = (int) (gameHeight / 2);
 
-    }
+		world = new GameWorld(midPointY);
+		renderer = new GameRenderer(world, (int) gameHeight, midPointY);
 
-    @Override
-    public void resize(int width, int height) {
-        Gdx.app.log("GameScreen!!","resize");
-    }
+		Gdx.input.setInputProcessor(new InputHandler(world.getBird()));
 
-    @Override
-    public void show() {
-        Gdx.app.log("GameScreen!!","show called");
-    }
+	}
 
-    @Override
-    public void hide() {
-        Gdx.app.log("GameScreen!!","hide called");
-    }
+	@Override
+	public void render(float delta) {
+		runTime += delta;
+		world.update(delta);
+		renderer.render(runTime);
+	}
 
-    @Override
-    public void pause() {
-        Gdx.app.log("GameScreen!!","pause called");
-    }
+	@Override
+	public void resize(int width, int height) {
+		System.out.println("GameScreen - resizing");
+	}
 
-    @Override
-    public void resume() {
-        Gdx.app.log("GameScreen!!","resume called");
-    }
+	@Override
+	public void show() {
+		System.out.println("GameScreen - show called");
+	}
 
-    @Override
-    public void dispose() {
+	@Override
+	public void hide() {
+		System.out.println("GameScreen - hide called");
+	}
 
-    }
+	@Override
+	public void pause() {
+		System.out.println("GameScreen - pause called");
+	}
+
+	@Override
+	public void resume() {
+		System.out.println("GameScreen - resume called");
+	}
+
+	@Override
+	public void dispose() {
+		// Leave blank
+	}
+
 }

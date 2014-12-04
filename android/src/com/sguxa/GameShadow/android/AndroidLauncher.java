@@ -10,8 +10,9 @@ public class AndroidLauncher extends AndroidApplication {
 	@Override
 	protected void onCreate (Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		AndroidApplicationConfiguration config = new AndroidA pplicationConfiguration();
-		initialize(new GameShadow(), config);
+		AndroidApplicationConfiguration cfg = new AndroidApplicationConfiguration();
+		 
+		initialize(new GameShadow(), cfg);
 	}
 
 

@@ -6,11 +6,13 @@ import com.sguxa.GameShadow.GameShadow;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title="GameShadol";
-		config.width=272;
-		config.height=408;
-		new LwjglApplication(new GameShadow(), config);
+		LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+		cfg.title = "ZombieBird";
+		cfg.disableAudio  = false;
+		cfg.width = 272;
+		cfg.height = 408;
+		
+		new LwjglApplication(new GameShadow(), cfg);
 	}
 }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.sguxa.GameObjects.Bird;
 import com.sguxa.zbhelpers.AssetLoader;
 
@@ -12,79 +13,79 @@ import com.sguxa.zbhelpers.AssetLoader;
  * Created by r.gushin on 03.12.2014.
  */
 public class GameRenderer {
-
+	
 	private GameWorld myWorld;
 	private OrthographicCamera cam;
 	private ShapeRenderer shapeRenderer;
 
-    private SpriteBatch batch;
+	private SpriteBatch batcher;
 
-    private int mindPointY;
-    private int gameHeight;
+	private int midPointY;
+	private int gameHeight;
 
-
-
-	public GameRenderer(GameWorld world, int gameHeight, int mindPointY) {
+	public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
 		myWorld = world;
 
-        this.gameHeight= this.gameHeight;
-        this.mindPointY=mindPointY;
-
+		// The word "this" refers to this instance.
+		// We are setting the instance variables' values to be that of the
+		// parameters passed in from GameScreen.
+		this.gameHeight = gameHeight;
+		this.midPointY = midPointY;
 
 		cam = new OrthographicCamera();
-		cam.setToOrtho(true, 136, this.gameHeight);
+		cam.setToOrtho(true, 136, gameHeight);
 
-        batch = new SpriteBatch();
-        // привяжите batcher к камере
-        batch.setProjectionMatrix(cam.combined);
-
+		batcher = new SpriteBatch();
+		batcher.setProjectionMatrix(cam.combined);
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
 	}
 
 	public void render(float runTime) {
 
-        Bird bird=myWorld.getBird();
+		// We will move these outside of the loop for performance later.
+		Bird bird = myWorld.getBird();
 
-        // Заполним задний фон одним цветом
+		// Fill the entire screen with black, to prevent potential flickering.
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Стартуем ShapeRenderer
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+		// Begin ShapeRenderer
+		shapeRenderer.begin(ShapeType.Filled);
+		
+		// Draw Background color
+		shapeRenderer.setColor(55 / 255.0f, 80 / 255.0f, 100 / 255.0f, 1);
+		shapeRenderer.rect(0, 0, 136, midPointY + 66);
 
-        // Отрисуем Background цвет
-        shapeRenderer.setColor(55/255.0f,80/255.0f,100/255.0f,1);
-        shapeRenderer.rect(0,0,136,mindPointY+65);
+		// Draw Grass
+		shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
+		shapeRenderer.rect(0, midPointY + 66, 136, 11);
 
-        // Отрисуем Grass
-        shapeRenderer.setColor(111/255.0f,186/255.0f,45/255.0f,1);
-        shapeRenderer.rect(0,mindPointY+65,136,11);
+		// Draw Dirt
+		shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
+		shapeRenderer.rect(0, midPointY + 77, 136, 52);
+		
+		// End ShapeRenderer
+		shapeRenderer.end();
 
-        // Отрисуем Dirt
-        shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-        shapeRenderer.rect(0,mindPointY+77,136,52);
+		// Begin SpriteBatch
+		batcher.begin();
+		// Disable transparency 
+		// This is good for performance when drawing images that do not require
+		// transparency.
+		batcher.disableBlending();
+		batcher.draw(AssetLoader.bg, 0, midPointY + 23, 136, 43);
 
-        // Заканчиваем ShapeRenderer
-        shapeRenderer.end();
-
-        // Стартуем SpriteBatch
-        batch.begin();
-
-        // Отменим прозрачность
-        // Это хорошо для производительности, когда отрисовываем картинки без прозрачности
-        batch.disableBlending();
-        batch.draw(AssetLoader.bg,0,mindPointY+23,136,43);
-
-        // Птичке нужна прозрачность, поэтому включаем ее
-        batch.enableBlending();
-
-        // Отрисуем птичку на ее координатах. Получим Animation объект из AssetLoader
-        // Передадим runTime переменную чтобы получить текущий кадр.
-        batch.draw(AssetLoader.birdAnimation.getKeyFrame(runTime),bird.getX(),bird.getY(),bird.getWidth(),bird.getHeight());
-
-        // Заканчиваем SpriteBatch
-        batch.end();
+		// The bird needs transparency, so we enable that again.
+		batcher.enableBlending();
+		
+		// Draw bird at its coordinates. Retrieve the Animation object from AssetLoader
+		// Pass in the runTime variable to get the current frame.
+		batcher.draw(AssetLoader.birdAnimation.getKeyFrame(runTime),
+				bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
+		
+		// End SpriteBatch
+		batcher.end();
 
 	}
 

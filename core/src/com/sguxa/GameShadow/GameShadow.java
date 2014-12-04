@@ -13,17 +13,19 @@ import com.sguxa.zbhelpers.AssetLoader;
 
 public class GameShadow extends Game {
 
-        @Override
-        public void create() {
-            Gdx.app.log("GameShadow","create");
-            AssetLoader.load();
-            setScreen(new GameScreen());
-        }
+	@Override
+    public void create() {
+        System.out.println("ZBGame Created!");
+        AssetLoader.load();
+        setScreen(new GameScreen());
+    }
 
-        public void dispose(){
-            super.dispose();
-            AssetLoader.dispose();
-        }
+    @Override
+    public void dispose() {
+        super.dispose();
+        AssetLoader.dispose();
+    }
+
 
 
     }
