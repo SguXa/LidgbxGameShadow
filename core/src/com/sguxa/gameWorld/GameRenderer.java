@@ -3,7 +3,9 @@ package com.sguxa.gameWorld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.sguxa.GameObjects.Bird;
@@ -22,6 +24,16 @@ public class GameRenderer {
 
 	private int midPointY;
 	private int gameHeight;
+	
+	// Объеты игры
+	private Bird bird;
+	
+	// Assets игры
+	private TextureRegion bg,grass;
+	private Animation birdAnimation;
+	private TextureRegion birdMid, birdDown, birdUp;
+	private TextureRegion skullUp,skullDown,bar;
+	
 
 	public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
 		myWorld = world;
@@ -40,14 +52,15 @@ public class GameRenderer {
 		batcher.setProjectionMatrix(cam.combined);
 		shapeRenderer = new ShapeRenderer();
 		shapeRenderer.setProjectionMatrix(cam.combined);
+
+		// Вызовем вспомогательные методы, чтобы проиницилизировать переменные класса
+		initGameObjects();
+        initAssets();
 	}
 
 	public void render(float runTime) {
 
-		// We will move these outside of the loop for performance later.
-		Bird bird = myWorld.getBird();
-
-        // Заполним задний фон одним цветом
+		// Заполним задний фон одним цветом
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -79,15 +92,37 @@ public class GameRenderer {
         // Птичке нужна прозрачность, поэтому включаем ее
 		batcher.enableBlending();
 
-        // Отрисуем птичку на ее координатах. Получим Animation объект из AssetLoader
-        // Передадим runTime переменную чтобы получить текущий кадр.
-		batcher.draw(AssetLoader.birdAnimation.getKeyFrame(runTime),
-				bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
-
+        
+		if(bird.shouldntFlap()){
+			batcher.draw(birdMid, bird.getX(), bird.getY(),
+                    bird.getWidth() / 2.0f, bird.getHeight() / 2.0f,
+                    bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
+		}else{
+			batcher.draw(birdAnimation.getKeyFrame(runTime), bird.getX(),
+                    bird.getY(), bird.getWidth() / 2.0f,
+                    bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(),
+                    1, 1, bird.getRotation());
+		}
+		
         // Заканчиваем SpriteBatch
 		batcher.end();
 
 	}
-
+	
+	private void initGameObjects(){
+		bird=myWorld.getBird();
+	}
+	
+	private void initAssets(){
+        bg = AssetLoader.bg;
+        grass = AssetLoader.grass;
+        birdAnimation = AssetLoader.birdAnimation;
+        birdMid = AssetLoader.bird;
+        birdDown = AssetLoader.birdDown;
+        birdUp = AssetLoader.birdUp;
+        skullUp = AssetLoader.skullUp;
+        skullDown = AssetLoader.skullDown;
+        bar = AssetLoader.bar;
+	}
 
 }
