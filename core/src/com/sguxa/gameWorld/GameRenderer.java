@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.sguxa.GameObjects.Bird;
+import com.sguxa.GameObjects.Grass;
+import com.sguxa.GameObjects.Pipe;
+import com.sguxa.GameObjects.ScrollHandler;
 import com.sguxa.zbhelpers.AssetLoader;
 
 /**
@@ -27,6 +30,9 @@ public class GameRenderer {
 	
 	// Объеты игры
 	private Bird bird;
+    private ScrollHandler scroller;
+    private Grass frontGrass,backGrass;
+    private Pipe pipe1,pipe2,pipe3;
 	
 	// Assets игры
 	private TextureRegion bg,grass;
@@ -111,6 +117,12 @@ public class GameRenderer {
 	
 	private void initGameObjects(){
 		bird=myWorld.getBird();
+        scroller=myWorld.getScroller();
+        frontGrass=scroller.getFrontGrass();
+        backGrass=scroller.getBaskGrass();
+        pipe1=scroller.getPipe1();
+        pipe2=scroller.getPipe2();
+        pipe3=scroller.getPipe3();
 	}
 	
 	private void initAssets(){
@@ -124,5 +136,19 @@ public class GameRenderer {
         skullDown = AssetLoader.skullDown;
         bar = AssetLoader.bar;
 	}
+
+    private void drawSkulls(){
+        // Временный код, извините за кашу :)
+        // Мы это починим, как только закончим с Pipe классом.
+        batcher.draw(skullUp,pipe1.getX()-1,pipe1.getY()+pipe1.getHeight()-14,24,14);
+        batcher.draw(skullDown,pipe1.getX()-1,pipe1.getY()+pipe1.getHeight()-14,24,14);
+
+        batcher.draw(skullUp,pipe2.getX()-1,pipe2.getY()+pipe2.getHeight()-14,24,14);
+        batcher.draw(skullDown,pipe2.getX()-1,pipe2.getY()+pipe2.getHeight()-14,24,14);
+
+        batcher.draw(skullUp,pipe2.getX()-1,pipe2.getY()+pipe2.getHeight()-14,24,14);
+        batcher.draw(skullDown,pipe2.getX()-1,pipe2.getY()+pipe2.getHeight()-14,24,14);
+    }
+
 
 }
